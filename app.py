@@ -17,7 +17,7 @@ def judge(content,index_count):
         return False
 
 
-start_url="https://gelbooru.com/index.php?page=post&s=list&tags=closers"
+start_url="https://gelbooru.com/index.php?page=post&s=list&tags=honkai_impact"
 headers={"Connection":"close"}
 resp=req.get(start_url)
 index_count=0
@@ -27,7 +27,7 @@ temp=0
 while resp:
     image_list=parser.xpath(resp.text,'//span[@class="thumb"]/a/@href')
     for image_url in image_list:
-        image_url="https://gelbooru.com/"+image_url
+        image_url="https:"+image_url
         resp_image_post=req.get(image_url,headers=headers)
         image=AimImages(parser.getRealImageurl(resp_image_post.text))
         image.save()
