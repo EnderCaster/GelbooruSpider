@@ -17,7 +17,7 @@ def judge(content,index_count):
         return False
 
 
-start_url="https://gelbooru.com/index.php?page=post&s=list&tags=honkai_impact"
+start_url="https://gelbooru.com/index.php?page=post&s=list&tags=honkai_impact_3rd"
 headers={"Connection":"close"}
 resp=req.get(start_url)
 index_count=0
@@ -29,7 +29,17 @@ while resp:
     for image_url in image_list:
         image_url="https:"+image_url
         resp_image_post=req.get(image_url,headers=headers)
-        image=AimImages(parser.getRealImageurl(resp_image_post.text))
+        source=parser.xpath(resp_image_post.text,'//*/li[contains(text(),"Source")]/a/@href')
+        tags=parser.xpath(resp_image_post,'//*/img/@alt')
+        if len(source) > 0 :
+            source=source[0]
+        else:
+            source=''
+        if len(tags) > 0 :
+            tags=tags[0]
+        else:
+            tags=''
+        image=AimImages(parser.getRealImageurl(resp_image_post.text),source,tags)
         image.save()
         # time.sleep(SETTINGS.DELAY_BASE+3*random())
         
