@@ -1,13 +1,13 @@
 #!/usr/bin/env python3
 #-*- coding:utf8 -*-
 class AimImages:
-    def __init__(self):
+    def __init__(self,keyword='record'):
         self.table_header=['URL','Source Link','Tag List','Rating']
         self.url=''
         self.source=''
         self.tags=''
         self.rating=''
-        self.url_file_name='record'
+        self.url_file_name=keyword
         self.url_file_extension='.csv'
     def save(self):
         line=[]
@@ -23,7 +23,7 @@ class AimImages:
         if not os.path.exists(file_name):
             with open(file_name,'w') as f:
                 f.write(",".join(self.table_header)+"\n")
-                
+
         with open(file_name,"a") as record:
             record.write(",".join(line)+"\n")
     

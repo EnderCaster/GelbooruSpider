@@ -6,6 +6,8 @@ from GelbooruParser import GelbooruParser
 from SETTINGS import SETTINGS
 from AimImages import AimImages
 from random import random
+import argparse
+from urllib import parse
 def judge(content,index_count):
     parser=GelbooruParser(content)
     page_list=parser.xpath(content,'//div[@class="pagination"]/a/@href')
@@ -17,7 +19,12 @@ def judge(content,index_count):
         return False
 
 
-start_url="https://gelbooru.com/index.php?page=post&s=list&tags=honkai_impact_3rd"
+arg_parser=argparse.ArgumentParser()
+arg_parser.add_argument('keyword')
+args=arg_parser.parse_args()
+keyword=parse.quote(args.keyword)
+
+start_url="https://gelbooru.com/index.php?page=post&s=list&tags="+keyword
 headers={"Connection":"close"}
 resp=req.get(start_url)
 index_count=0
@@ -31,7 +38,7 @@ while resp:
         resp_image_post=req.get(image_url,headers=headers)
         parser.setHTML(resp_image_post.text)
         url,source,tags,rating=parser.getImageParams()
-        image=AimImages()
+        image=AimImages(keyword=keyword)
         image.url=url
         image.source=source
         image.tags=tags
